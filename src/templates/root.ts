@@ -1,30 +1,30 @@
 export interface RootTemplateOptions {
-	packageName: string;
+  packageName: string;
 }
 
 export function rootPackageJson({ packageName }: RootTemplateOptions) {
-	return `${JSON.stringify(
-		{
-			name: packageName,
-			private: true,
-			workspaces: ["backend", "frontend"],
-			scripts: {
-				build: "bun run --cwd frontend build",
-				deploy: "bun run build && bun run --cwd backend deploy",
-				dev: "bun run --cwd backend dev",
-				lint: "oxlint",
-				"lint:fix": "oxlint --fix",
-				fmt: "oxfmt",
-				"fmt:check": "oxfmt --check",
-			},
-			devDependencies: {
-				oxfmt: "^0.49.0",
-				oxlint: "^1.64.0",
-			},
-		},
-		null,
-		2,
-	)}\n`;
+  return `${JSON.stringify(
+    {
+      name: packageName,
+      private: true,
+      workspaces: ['backend', 'frontend'],
+      scripts: {
+        build: 'bun run --cwd frontend build',
+        deploy: 'bun run build && bun run --cwd backend deploy',
+        dev: 'bun run --cwd backend dev',
+        lint: 'oxlint',
+        'lint:fix': 'oxlint --fix',
+        fmt: 'oxfmt',
+        'fmt:check': 'oxfmt --check',
+      },
+      devDependencies: {
+        oxfmt: '^0.49.0',
+        oxlint: '^1.64.0',
+      },
+    },
+    null,
+    2,
+  )}\n`;
 }
 
 export const bunfigToml = `# bunfig.toml
@@ -70,62 +70,62 @@ coverage
 `;
 
 export const oxlintConfig = `${JSON.stringify(
-	{
-		$schema: "./node_modules/oxlint/configuration_schema.json",
-	},
-	null,
-	2,
+  {
+    $schema: './node_modules/oxlint/configuration_schema.json',
+  },
+  null,
+  2,
 )}\n`;
 
 export const oxfmtConfig = `${JSON.stringify(
-	{
-		$schema: "./node_modules/oxfmt/configuration_schema.json",
-		singleQuote: true,
-		ignorePatterns: ["**/*.d.ts"],
-	},
-	null,
-	2,
+  {
+    $schema: './node_modules/oxfmt/configuration_schema.json',
+    singleQuote: true,
+    ignorePatterns: ['**/*.d.ts'],
+  },
+  null,
+  2,
 )}\n`;
 
 export const vscodeSettings = `${JSON.stringify(
-	{
-		"biome.enabled": false,
-		"oxc.fmt.configPath": ".oxfmtrc.json",
-		"editor.defaultFormatter": "oxc.oxc-vscode",
-		"editor.formatOnSave": true,
-		"[json]": {
-			"editor.defaultFormatter": "oxc.oxc-vscode",
-		},
-		"[javascript]": {
-			"editor.defaultFormatter": "oxc.oxc-vscode",
-		},
-		"[typescript]": {
-			"editor.defaultFormatter": "oxc.oxc-vscode",
-		},
-		"[javascriptreact]": {
-			"editor.defaultFormatter": "oxc.oxc-vscode",
-		},
-		"[typescriptreact]": {
-			"editor.defaultFormatter": "oxc.oxc-vscode",
-		},
-		"[jsonc]": {
-			"editor.defaultFormatter": "oxc.oxc-vscode",
-		},
-	},
-	null,
-	2,
+  {
+    'biome.enabled': false,
+    'oxc.fmt.configPath': '.oxfmtrc.json',
+    'editor.defaultFormatter': 'oxc.oxc-vscode',
+    'editor.formatOnSave': true,
+    '[json]': {
+      'editor.defaultFormatter': 'oxc.oxc-vscode',
+    },
+    '[javascript]': {
+      'editor.defaultFormatter': 'oxc.oxc-vscode',
+    },
+    '[typescript]': {
+      'editor.defaultFormatter': 'oxc.oxc-vscode',
+    },
+    '[javascriptreact]': {
+      'editor.defaultFormatter': 'oxc.oxc-vscode',
+    },
+    '[typescriptreact]': {
+      'editor.defaultFormatter': 'oxc.oxc-vscode',
+    },
+    '[jsonc]': {
+      'editor.defaultFormatter': 'oxc.oxc-vscode',
+    },
+  },
+  null,
+  2,
 )}\n`;
 
 export const vscodeExtensions = `${JSON.stringify(
-	{
-		recommendations: ["oxc.oxc-vscode"],
-	},
-	null,
-	2,
+  {
+    recommendations: ['oxc.oxc-vscode'],
+  },
+  null,
+  2,
 )}\n`;
 
 export function readme({ packageName }: RootTemplateOptions) {
-	return `# ${packageName}
+  return `# ${packageName}
 
 Bun workspace with a Vite React frontend and a Cloudflare Worker backend.
 
