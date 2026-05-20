@@ -13,7 +13,6 @@ import {
   middlewareTs,
   schemaTs,
   typesTs,
-  workerConfiguration,
   wranglerJsonc,
 } from './templates/backend.ts';
 import {
@@ -165,6 +164,7 @@ async function scaffold(options: ScaffoldOptions) {
 
   if (options.install) {
     await runCommand('bun', ['install'], options.targetDir);
+    await runPostInstallCommands(options);
   }
 }
 
@@ -237,7 +237,6 @@ async function writeBackendFiles(options: ScaffoldOptions) {
   await writeFile(path.join(backendDir, 'package.json'), backendPackageJson(options));
   await writeFile(path.join(backendDir, 'wrangler.jsonc'), wranglerJsonc(options));
   await writeFile(path.join(backendDir, 'tsconfig.json'), backendTsconfig);
-  await writeFile(path.join(backendDir, 'worker-configuration.d.ts'), workerConfiguration);
   await writeFile(path.join(backendDir, 'drizzle.config.ts'), drizzleConfig);
   await writeFile(path.join(backendDir, '.dev.vars'), devVars);
   await writeFile(path.join(backendDir, 'src', 'index.ts'), indexTs);
@@ -245,6 +244,11 @@ async function writeBackendFiles(options: ScaffoldOptions) {
   await writeFile(path.join(backendDir, 'src', 'types.ts'), typesTs);
   await writeFile(path.join(backendDir, 'src', 'middleware.ts'), middlewareTs);
   await writeFile(path.join(backendDir, 'src', 'routers', 'health.ts'), healthRouterTs);
+}
+
+async function runPostInstallCommands(options: ScaffoldOptions) {
+  await runCommand('bun', ['run', 'fmt'], options.targetDir);
+  await runCommand('bun', ['wrangler', 'types'], path.join(options.targetDir, 'backend'));
 }
 
 async function runCommand(command: string, args: string[], cwd: string) {
@@ -327,11 +331,19 @@ Options:
 
 function printNextSteps(options: ScaffoldOptions) {
   const relativeTarget = path.relative(process.cwd(), options.targetDir) || '.';
+  const installSteps = options.install
+    ? ''
+    : `
+  bun install
+  bun run fmt
+  (cd backend && bun wrangler types)
+`;
 
   console.log(`
 Done. Next steps:
 
   cd ${relativeTarget}
+${installSteps}
   bun run --cwd frontend dev
   bun run dev
 

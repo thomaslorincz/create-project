@@ -84,15 +84,6 @@ export const tsconfig = `{
 }
 `;
 
-export const workerConfiguration = `interface Env {
-  ASSETS: {
-    fetch(request: Request): Promise<Response>;
-  };
-  DATABASE_URL: string;
-  ENV: string;
-}
-`;
-
 export const drizzleConfig = `import { type Config, defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
