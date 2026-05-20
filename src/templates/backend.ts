@@ -197,6 +197,6 @@ app.notFound((c) => {
 export default app;
 `;
 
-export const devVarsExample = `ENV=development
-DATABASE_URL=postgres://user:password@localhost:5432/app
+export const devVars = `ENV=development
+DATABASE_URL=
 `;

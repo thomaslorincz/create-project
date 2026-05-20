@@ -65,7 +65,6 @@ coverage
 # wrangler files
 .wrangler
 .dev.vars*
-!.dev.vars.example
 !.env.example
 `;
 
@@ -154,6 +153,6 @@ The frontend dev server proxies \`/api\` to the Worker on \`http://localhost:878
 
 ## Environment
 
-Copy \`backend/.dev.vars.example\` to \`backend/.dev.vars\` for local Worker secrets.
+Fill in \`DATABASE_URL\` in \`backend/.dev.vars\` for local Worker secrets.
 `;
 }

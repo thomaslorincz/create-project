@@ -6,7 +6,7 @@ import readline from 'node:readline/promises';
 import {
   backendPackageJson,
   tsconfig as backendTsconfig,
-  devVarsExample,
+  devVars,
   drizzleConfig,
   healthRouterTs,
   indexTs,
@@ -237,7 +237,7 @@ async function writeBackendFiles(options: ScaffoldOptions) {
   await writeFile(path.join(backendDir, 'tsconfig.json'), backendTsconfig);
   await writeFile(path.join(backendDir, 'worker-configuration.d.ts'), workerConfiguration);
   await writeFile(path.join(backendDir, 'drizzle.config.ts'), drizzleConfig);
-  await writeFile(path.join(backendDir, '.dev.vars.example'), devVarsExample);
+  await writeFile(path.join(backendDir, '.dev.vars'), devVars);
   await writeFile(path.join(backendDir, 'src', 'index.ts'), indexTs);
   await writeFile(path.join(backendDir, 'src', 'schema.ts'), schemaTs);
   await writeFile(path.join(backendDir, 'src', 'types.ts'), typesTs);
@@ -335,7 +335,7 @@ Done. Next steps:
 
 Before deploying:
 
-  cp backend/.dev.vars.example backend/.dev.vars
+  Fill in DATABASE_URL in backend/.dev.vars
   bun run deploy
 `);
 }
