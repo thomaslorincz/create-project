@@ -1,0 +1,7 @@
+# General
+- Do not automatically fix or focus on linting errors unless specifically asked. Focus only on functionality
+- Do not build solutions when you are finished. Do not run build commands
+
+# TypeScript
+- Prefer interfaces over types unless an interface is not possible
+- Avoid using ReturnType over defining standalone types for return values
