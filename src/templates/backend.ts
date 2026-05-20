@@ -46,8 +46,7 @@ export function wranglerJsonc({ workerName }: BackendTemplateOptions) {
   "assets": {
     "directory": "../frontend/dist",
     "binding": "ASSETS",
-    "not_found_handling": "single-page-application",
-    "run_worker_first": true
+    "not_found_handling": "single-page-application"
   },
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
