@@ -4,7 +4,11 @@
   "private": true,
   "type": "module",
   "bin": {
-    "create-project": "./src/index.ts"
+    "create-project": "./src/index.ts",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
   },
   "scripts": {
     "start": "bun run src/index.ts",
