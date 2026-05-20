@@ -1,7 +1,6 @@
 {
   "name": "@thomaslorincz/create-project",
   "version": "0.1.0",
-  "private": true,
   "license": "MIT",
   "bin": {
     "create-project": "./src/index.ts"
