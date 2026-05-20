@@ -30,6 +30,7 @@ import {
 } from './templates/frontend.ts';
 import {
   bunfigToml,
+  cursorRules,
   gitignore,
   oxfmtConfig,
   oxlintConfig,
@@ -193,6 +194,7 @@ async function writeRootFiles(options: ScaffoldOptions) {
   await writeFile(path.join(options.targetDir, 'package.json'), rootPackageJson(options));
   await writeFile(path.join(options.targetDir, 'bunfig.toml'), bunfigToml);
   await writeFile(path.join(options.targetDir, '.gitignore'), gitignore);
+  await writeFile(path.join(options.targetDir, '.cursorrules'), cursorRules);
   await writeFile(path.join(options.targetDir, '.oxlintrc.json'), oxlintConfig);
   await writeFile(path.join(options.targetDir, '.oxfmtrc.json'), oxfmtConfig);
   await writeFile(path.join(options.targetDir, 'README.md'), readme(options));
