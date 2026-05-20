@@ -205,14 +205,9 @@ async function writeRootFiles(options: ScaffoldOptions) {
 }
 
 async function scaffoldFrontend(options: ScaffoldOptions) {
-  await runCommand(
-    'bun',
-    ['create', 'vite@latest', 'frontend', '--', '--template', 'react-ts'],
-    options.targetDir,
-  );
-
   const frontendDir = path.join(options.targetDir, 'frontend');
 
+  await mkdir(path.join(frontendDir, 'src'), { recursive: true });
   await writeFile(path.join(frontendDir, 'package.json'), frontendPackageJson(options));
   await writeFile(path.join(frontendDir, 'vite.config.ts'), viteConfig);
   await writeFile(path.join(frontendDir, 'tsconfig.json'), tsconfig);
@@ -220,9 +215,6 @@ async function scaffoldFrontend(options: ScaffoldOptions) {
   await writeFile(path.join(frontendDir, 'tsconfig.node.json'), tsconfigNode);
   await writeFile(path.join(frontendDir, 'index.html'), indexHtml);
   await writeFile(path.join(frontendDir, '.oxlintrc.json'), frontendOxlintConfig);
-
-  await rm(path.join(frontendDir, 'src'), { force: true, recursive: true });
-  await mkdir(path.join(frontendDir, 'src'), { recursive: true });
   await writeFile(path.join(frontendDir, 'src', 'main.tsx'), mainTsx);
   await writeFile(path.join(frontendDir, 'src', 'App.tsx'), appTsx);
   await writeFile(path.join(frontendDir, 'src', 'index.css'), indexCss);
