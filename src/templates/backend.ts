@@ -43,6 +43,9 @@ export function wranglerJsonc({ workerName }: BackendTemplateOptions) {
   "observability": {
     "enabled": true
   },
+  "placement": {
+    "region": "aws:ca-central-1"
+  },
   "assets": {
     "directory": "../frontend/dist",
     "binding": "ASSETS",
