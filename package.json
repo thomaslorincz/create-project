@@ -3,7 +3,7 @@
   "version": "0.1.2",
   "license": "MIT",
   "bin": {
-    "create-project": "./src/index.ts"
+    "create-project": "src/index.ts"
   },
   "type": "module",
   "scripts": {
