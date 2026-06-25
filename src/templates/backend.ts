@@ -23,6 +23,7 @@ export function backendPackageJson({ packageName }: BackendTemplateOptions) {
         zod: '^4.3.6',
       },
       devDependencies: {
+        '@types/bun': '^1.3.14',
         '@types/node': '^25.5.2',
         'drizzle-kit': '^0.31.10',
         typescript: '^6.0.2',
@@ -75,7 +76,7 @@ export const tsconfig = `{
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "types": ["./worker-configuration.d.ts", "node"],
+    "types": ["./worker-configuration.d.ts", "node", "bun"],
     "paths": {
       "@/*": ["./src/*"]
     }
