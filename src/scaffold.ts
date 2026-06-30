@@ -3,6 +3,7 @@ import { mkdir, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { stdin as input, stdout as output } from 'node:process';
 import readline from 'node:readline/promises';
+import { AI_PLATFORM_CHOICES, aiRulesCliPath, type AiPlatformChoice } from './ai-rules.ts';
 import {
   backendPackageJson,
   tsconfig as backendTsconfig,
@@ -29,7 +30,6 @@ import {
 } from './templates/frontend.ts';
 import {
   bunfigToml,
-  cursorRules,
   gitignore,
   oxfmtConfig,
   oxlintConfig,
@@ -40,6 +40,7 @@ import {
 } from './templates/root.ts';
 
 interface CliOptions {
+  aiPlatform?: AiPlatformChoice;
   force: boolean;
   help: boolean;
   install: boolean;
@@ -48,6 +49,7 @@ interface CliOptions {
 }
 
 interface ScaffoldOptions {
+  aiPlatform: AiPlatformChoice;
   force: boolean;
   install: boolean;
   packageName: string;
@@ -70,7 +72,10 @@ export async function run(argv: string[]) {
 
   validatePackageName(packageName);
 
+  const aiPlatform = options.aiPlatform ?? (await promptAiPlatform());
+
   const scaffoldOptions: ScaffoldOptions = {
+    aiPlatform,
     force: options.force,
     install: options.install,
     packageName,
@@ -105,6 +110,23 @@ async function getOptions(argv: string[]): Promise<CliOptions> {
 
     if (arg === '--no-install') {
       options.install = false;
+      continue;
+    }
+
+    if (arg === '--ai-platform') {
+      const value = argv[index + 1];
+
+      if (!value) {
+        throw new Error('Expected a value after --ai-platform.');
+      }
+
+      options.aiPlatform = parseAiPlatform(value);
+      index += 1;
+      continue;
+    }
+
+    if (arg.startsWith('--ai-platform=')) {
+      options.aiPlatform = parseAiPlatform(arg.slice('--ai-platform='.length));
       continue;
     }
 
@@ -156,11 +178,39 @@ async function promptProjectName() {
   }
 }
 
+async function promptAiPlatform(): Promise<AiPlatformChoice> {
+  const rl = readline.createInterface({ input, output });
+
+  try {
+    console.log('\nAI platform:');
+
+    for (const choice of AI_PLATFORM_CHOICES) {
+      const selected = choice.value === 'cursor';
+      console.log(`  ${selected ? '[x]' : '[ ]'} ${choice.value} - ${choice.label}`);
+    }
+
+    const answer = await rl.question('\nSelect platform (Enter for cursor): ');
+    const trimmed = answer.trim();
+
+    if (!trimmed) {
+      return 'cursor';
+    }
+
+    return parseAiPlatform(trimmed);
+  } finally {
+    rl.close();
+  }
+}
+
 async function scaffold(options: ScaffoldOptions) {
   await prepareTargetDirectory(options);
   await writeRootFiles(options);
   await scaffoldFrontend(options);
   await writeBackendFiles(options);
+
+  if (options.aiPlatform !== 'none') {
+    await initAiRules(options);
+  }
 
   if (options.install) {
     await runCommand('bun', ['install'], options.targetDir);
@@ -194,7 +244,6 @@ async function writeRootFiles(options: ScaffoldOptions) {
   await writeFile(path.join(options.targetDir, 'package.json'), rootPackageJson(options));
   await writeFile(path.join(options.targetDir, 'bunfig.toml'), bunfigToml);
   await writeFile(path.join(options.targetDir, '.gitignore'), gitignore);
-  await writeFile(path.join(options.targetDir, '.cursorrules'), cursorRules);
   await writeFile(path.join(options.targetDir, '.oxlintrc.json'), oxlintConfig);
   await writeFile(path.join(options.targetDir, '.oxfmtrc.json'), oxfmtConfig);
   await writeFile(path.join(options.targetDir, 'README.md'), readme(options));
@@ -236,6 +285,24 @@ async function writeBackendFiles(options: ScaffoldOptions) {
   await writeFile(path.join(backendDir, 'src', 'types.ts'), typesTs);
   await writeFile(path.join(backendDir, 'src', 'middleware.ts'), middlewareTs);
   await writeFile(path.join(backendDir, 'src', 'routers', 'health.ts'), healthRouterTs);
+}
+
+async function initAiRules({ aiPlatform, targetDir }: ScaffoldOptions) {
+  const args = [aiRulesCliPath(), 'init', '--platform', aiPlatform, '--force'];
+
+  await runCommand('node', args, targetDir);
+}
+
+function parseAiPlatform(value: string): AiPlatformChoice {
+  const platform = value.toLowerCase();
+
+  if (AI_PLATFORM_CHOICES.some((choice) => choice.value === platform)) {
+    return platform as AiPlatformChoice;
+  }
+
+  throw new Error(
+    `Unknown AI platform "${value}". Use: ${AI_PLATFORM_CHOICES.map((choice) => choice.value).join(', ')}.`,
+  );
 }
 
 async function runPostInstallCommands(options: ScaffoldOptions) {
@@ -314,10 +381,11 @@ Usage:
   create-project <project-name> [options]
 
 Options:
-  --name <package-name>  Override the generated package name
-  --force, -f            Overwrite a non-empty target directory
-  --no-install           Skip bun install after scaffolding
-  --help, -h             Show this help message
+  --name <package-name>       Override the generated package name
+  --ai-platform <platform>    cursor (default) | claude | other | none
+  --force, -f                 Overwrite a non-empty target directory
+  --no-install                Skip bun install after scaffolding
+  --help, -h                  Show this help message
 `);
 }
 

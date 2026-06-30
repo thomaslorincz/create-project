@@ -68,23 +68,6 @@ coverage
 !.env.example
 `;
 
-export const cursorRules = `# General
-- Do not automatically fix or focus on linting errors unless specifically asked. Focus only on functionality
-- Do not build solutions when you are finished. Do not run build commands
-
-# TypeScript
-- Prefer interfaces over types unless an interface is not possible
-- Avoid using ReturnType over defining standalone types for return values
-
-# React
-- Prefer export default function Component over having an export at the end of the file
-- Prefer component props to be named just Props instead of ComponentNameProps for simplicity
-- Prefer to "import { Thing } from React" rather than "import * as React" with usage as React.Thing
-- Use React Query when applicable for server state
-- Avoid useEffect unless it is applicable and necessary
-- Avoid manual useCallback/useMemo by default; React Compiler handles most memoization in this project. Add them only when needed for non-React consumers, opt-out components, or other cases the compiler cannot optimize.
-`;
-
 export const oxlintConfig = `${JSON.stringify(
   {
     $schema: './node_modules/oxlint/configuration_schema.json',

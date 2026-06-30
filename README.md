@@ -20,7 +20,7 @@ The generated project includes:
 - [Drizzle ORM](https://orm.drizzle.team) configured for [PostgreSQL](https://www.postgresql.org).
 - [Wrangler](https://developers.cloudflare.com/workers/wrangler/) configuration for local development and deployment.
 - [Bun](https://bun.sh) workspace scripts for development, formatting, linting, and deployment.
-- [Cursor](https://cursor.com)-friendly project defaults, including a generated `.cursorrules` file.
+- [Cursor](https://cursor.com)-friendly AI rules via [`@thomaslorincz/ai-rules`](https://www.npmjs.com/package/@thomaslorincz/ai-rules), with a platform picker during scaffolding.
 
 ## Usage
 
@@ -28,11 +28,32 @@ The generated project includes:
 bun create @thomaslorincz/project my-project
 ```
 
+During scaffolding you'll be prompted to choose an AI platform. Defaults to Cursor.
+
+```sh
+# Use Claude Code rules instead of Cursor
+bun create @thomaslorincz/project my-project --ai-platform claude
+
+# Skip AI rules entirely
+bun create @thomaslorincz/project my-project --ai-platform none
+```
+
+To refresh rules later in a generated project:
+
+```sh
+bunx @thomaslorincz/ai-rules sync
+```
+
 ## Generated Project Structure
 
 ```text
 my-project/
-├── .cursorrules
+├── .cursor/
+│   └── rules/
+│       ├── general.mdc
+│       ├── typescript.mdc
+│       ├── react.mdc
+│       └── database.mdc
 ├── .gitignore
 ├── .oxfmtrc.json
 ├── .oxlintrc.json
